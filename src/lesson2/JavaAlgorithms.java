@@ -3,6 +3,8 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
+import java.util.Arrays;
+
 @SuppressWarnings("unused")
 public class JavaAlgorithms {
     /**
@@ -97,8 +99,40 @@ public class JavaAlgorithms {
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
      */
+
+    // динамическое программирование
     static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+
+        //сложность O(firs*second)
+        //память O(firs*second)
+
+        if (firs == null || second == null || firs.length() == 0 || second.length() == 0) return "";
+
+        if (firs.equals(second)) return firs;
+
+        int[][] matrix = new int[firs.length()][];
+
+        int maxLength = 0;
+        int maxIndex = 0;
+
+        for (int i = 0; i < matrix.length; i++) {
+
+            matrix[i] = new int[second.length()];
+
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (firs.charAt(i) == second.charAt(j)) {
+
+                    if (i != 0 && j != 0) matrix[i][j] = matrix[i - 1][j - 1] + 1;
+                    else matrix[i][j] = 1;
+
+                    if (matrix[i][j] > maxLength) {
+                        maxLength = matrix[i][j];
+                        maxIndex = i;
+                    }
+                }
+            }
+        }
+        return firs.substring(maxIndex - maxLength + 1, maxIndex + 1);
     }
 
     /**
@@ -111,7 +145,29 @@ public class JavaAlgorithms {
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
      */
+
+    //решето Эратосфена
     static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+
+        //сложность O(limit*log(log(limit)))
+        //память O(limit)
+
+        if (limit <= 1) return 0;
+        int amount = 0;
+
+        boolean[] primes = new boolean[limit + 1];
+
+        Arrays.fill(primes, true);
+        primes[0] = false;
+        primes[1] = false;
+
+        for (int i = 2; i <= limit; i++) {
+            if (primes[i]) {
+                amount++;
+                for (int j = i * 2; j <= limit; j += i)
+                    primes[j] = false;
+            }
+        }
+        return amount;
     }
 }

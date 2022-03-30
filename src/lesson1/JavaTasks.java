@@ -2,6 +2,12 @@ package lesson1;
 
 import kotlin.NotImplementedError;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.*;
+
 @SuppressWarnings("unused")
 public class JavaTasks {
     /**
@@ -31,11 +37,10 @@ public class JavaTasks {
      * 01:15:19 PM
      * 01:15:19 PM
      * 07:56:14 PM
-     *
+     * throw new NotImplementedError();
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
     static public void sortTimes(String inputName, String outputName) {
-        throw new NotImplementedError();
     }
 
     /**
@@ -98,8 +103,41 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
-    static public void sortTemperatures(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortTemperatures(String inputName, String outputName) throws IOException {
+
+        //сложность O(n), где n - количество чисел в данном файле
+        //память O(1) - всегда фиксированная
+
+        int[] positive = new int[5001];
+        int[] negative = new int[2731];
+
+        try (BufferedReader br = new BufferedReader(new FileReader(inputName))) {
+
+            String currentLine;
+
+            while ((currentLine = br.readLine()) != null) {
+                if (!Pattern.matches("[\\s-]?\\d+[.]\\d", currentLine)) throw new NotImplementedError();
+                double doub = Double.parseDouble(currentLine) * 10;
+                int index = (int) doub;
+
+                if (index < 0) negative[index * (-1)]++;
+                else positive[index]++;
+            }
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputName))) {
+            for (int i = 2730; i > 0; i--) {
+                if (negative[i] > 0) {
+                    for (int t = 1; t <= negative[i]; t++) bw.write("-" + ((double) i )/ 10 + "\n");
+                }
+            }
+
+            for (int i = 0; i < 5001; i++) {
+                if (positive[i] > 0) {
+                    for (int t = 1; t <= positive[i]; t++) bw.write(((double) i )/ 10 + "\n");
+                }
+            }
+        }
     }
 
     /**
@@ -131,8 +169,46 @@ public class JavaTasks {
      * 2
      * 2
      */
-    static public void sortSequence(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortSequence(String inputName, String outputName) throws IOException {
+
+        //сложность O(n), где n - количество чисел в данном файле
+        //память O(n), где n - количество чисел в данном файле
+
+        ArrayList<Integer> sequence = new ArrayList<>();
+        Map<Integer, Integer> pairs = new HashMap<>();
+        int most = 0;
+        Integer theNumber = 2147483647;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(inputName))) {
+
+            String currentLine;
+
+            while ((currentLine = br.readLine()) != null) {
+                if (!Pattern.matches("\\d+", currentLine)) throw new NotImplementedError();
+                int number = Integer.parseInt(currentLine);
+                sequence.add(number);
+                if (pairs.containsKey(number)) pairs.put(number, pairs.get(number) + 1);
+                else pairs.put(number, 1);
+                if (pairs.get(number) > most) {
+                    most = pairs.get(number);
+                    theNumber = number;
+                }
+                if (pairs.get(number) == most) {
+                    if (number <= theNumber)
+                        theNumber = number;
+                }
+            }
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputName))) {
+
+            if (sequence.isEmpty()) return;
+
+            for (Integer integer : sequence) {
+                if (!integer.equals(theNumber)) bw.write(integer + "\n");
+            }
+            for (int i = pairs.get(theNumber); i > 0; i--) bw.write(theNumber + "\n" );
+        }
     }
 
     /**
