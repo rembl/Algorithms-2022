@@ -103,6 +103,7 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
+
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
 
         //сложность O(n), где n - количество чисел в данном файле

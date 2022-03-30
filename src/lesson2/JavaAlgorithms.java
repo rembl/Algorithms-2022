@@ -101,6 +101,7 @@ public class JavaAlgorithms {
      */
 
     // динамическое программирование
+
     static public String longestCommonSubstring(String firs, String second) {
 
         //сложность O(firs*second)
@@ -147,6 +148,7 @@ public class JavaAlgorithms {
      */
 
     //решето Эратосфена
+
     static public int calcPrimesNumber(int limit) {
 
         //сложность O(limit*log(log(limit)))
