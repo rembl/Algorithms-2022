@@ -243,6 +243,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
          *
          * Средняя
          */
+
         @Override
         public T next() {
 
