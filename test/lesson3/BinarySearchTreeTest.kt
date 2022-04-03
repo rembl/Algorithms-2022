@@ -30,6 +30,7 @@ class BinarySearchTreeTest : AbstractBinarySearchTreeTest() {
     @Tag("5")
     fun removeTestJava() {
         doRemoveTest()
+        doRemoveTestMy()
     }
 
     @Test
@@ -42,6 +43,7 @@ class BinarySearchTreeTest : AbstractBinarySearchTreeTest() {
     @Tag("8")
     fun iteratorRemoveTestJava() {
         doIteratorRemoveTest()
+        doIteratorRemoveTestMy()
     }
 
     @Test
