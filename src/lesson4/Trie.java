@@ -1,7 +1,7 @@
 package lesson4;
 
 import java.util.*;
-import kotlin.NotImplementedError;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,12 +88,76 @@ public class Trie extends AbstractSet<String> implements Set<String> {
      * Спецификация: {@link Iterator} (Ctrl+Click по Iterator)
      *
      * Сложная
+     * @return
      */
     @NotNull
     @Override
     public Iterator<String> iterator() {
-        // TODO
-        throw new NotImplementedError();
+        return new TrieIterator();
+    }
+
+    public class TrieIterator implements Iterator<String> {
+
+        private final List<String> allWords;
+        private int currentWord;
+        private final int amountOfWords;
+        private String node;
+
+        private TrieIterator() {
+
+            currentWord = 0;
+            amountOfWords = size();
+            allWords = new ArrayList<>();
+            childrenLoop(root, "");
+
+        }
+
+        private void childrenLoop(Node current, String word) {
+
+            for (char letter : current.children.keySet()) {
+
+                if (letter != (char) 0) {
+                    childrenLoop(current.children.get(letter), word + letter);
+                }
+                else allWords.add(word);
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+
+            //сложность O(1)
+            //память O(1)
+
+            return currentWord < amountOfWords;
+
+        }
+
+        @Override
+        public String next() {
+
+            //сложность O(1)
+            //память O(1)
+
+           if (hasNext()) {
+               node = allWords.get(currentWord);
+               currentWord++;
+               return node;
+           } else throw new NoSuchElementException();
+
+        }
+
+        @Override
+        public void remove() {
+
+            //сложность O(длина слова)
+            //память O(1)
+
+            if (node == null) throw new IllegalStateException();
+
+            Trie.this.remove(node);
+            node = null;
+        }
     }
 
 }
