@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class OpenAddressingSet<T> extends AbstractSet<T> {
@@ -14,6 +15,8 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
     private final int capacity;
 
     private final Object[] storage;
+
+    private final Object dummy = new Object();
 
     private int size = 0;
 
@@ -85,7 +88,7 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
     /**
      * Удаление элемента из таблицы
      *
-     * Если элемент есть в таблица, функция удаляет его из дерева и возвращает true.
+     * Если элемент есть в таблице, функция удаляет его из дерева и возвращает true.
      * В ином случае функция оставляет множество нетронутым и возвращает false.
      * Высота дерева не должна увеличиться в результате удаления.
      *
@@ -95,7 +98,29 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
      */
     @Override
     public boolean remove(Object o) {
-        return super.remove(o);
+
+        //сложность O(N)
+        //память O(1)
+
+        int startingIndex = startingIndex(o);
+        int index = startingIndex;
+        Object current = storage[index];
+
+        while (current != null) {
+            if (current.equals(o)) {
+                storage[index] = dummy;
+                size--;
+                return true;
+            }
+
+            index = (index + 1) % capacity;
+            if (index == startingIndex) return false;
+            current = storage[index];
+
+        }
+
+        return false;
+
     }
 
     /**
@@ -111,7 +136,63 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
     @NotNull
     @Override
     public Iterator<T> iterator() {
-        // TODO
-        throw new NotImplementedError();
+        return new OpenAddressingIterator();
+    }
+
+    public class OpenAddressingIterator implements Iterator<T> {
+
+        private int currentIndex;
+        private int currentElement;
+        private final int amountOfElements;
+        private Object node;
+
+        OpenAddressingIterator() {
+
+            currentIndex = -1;
+            currentElement = 0;
+            amountOfElements = size();
+
+        }
+
+        @Override
+        public boolean hasNext() {
+
+            //сложность O(1)
+            //память O(1)
+
+            return currentElement < amountOfElements;
+        }
+
+        @Override
+        public T next() {
+
+            //сложность O(N)
+            //память O(1)
+
+            if (!hasNext()) throw new NoSuchElementException();
+            else {
+                node = null;
+                while (node == null || node == dummy) {
+                    currentIndex++;
+                    node = storage[currentIndex];
+                }
+
+                currentElement++;
+                return (T) node;
+            }
+        }
+
+        @Override
+        public void remove() {
+
+            //сложность O(1)
+            //память O(1)
+
+            if (node == null) throw new IllegalStateException();
+
+            storage[currentIndex] = dummy;
+            node = null;
+            size--;
+        }
     }
 }

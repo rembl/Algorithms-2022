@@ -19,17 +19,20 @@ class OpenAddressingSetTest : AbstractOpenAddressingSetTest() {
     @Tag("7")
     fun removeTestJava() {
         doRemoveTest()
+        doRemoveTestMy()
     }
 
     @Test
     @Tag("5")
     fun iteratorTestJava() {
         doIteratorTest()
+        doIteratorTestMy()
     }
 
     @Test
     @Tag("8")
     fun iteratorRemoveTestJava() {
         doIteratorRemoveTest()
+        doIteratorRemoveTestMy()
     }
 }
