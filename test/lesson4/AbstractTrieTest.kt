@@ -204,6 +204,7 @@ abstract class AbstractTrieTest {
                 }
             }
         }
+
         assertEquals(
             0, counter,
             "TrieIterator.remove() changed iterator position: ${abs(counter)} elements were ${if (counter > 0) "skipped" else "revisited"}."

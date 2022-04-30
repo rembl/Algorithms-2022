@@ -90,6 +90,7 @@ public class Trie extends AbstractSet<String> implements Set<String> {
      * Сложная
      * @return
      */
+
     @NotNull
     @Override
     public Iterator<String> iterator() {

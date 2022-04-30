@@ -23,8 +23,10 @@ class TrieTest : AbstractTrieTest() {
     @Test
     @Tag("8")
     fun iteratorRemoveTestJava() {
+
         doIteratorRemoveTest()
         doIteratorRemoveTestMy()
+
     }
 
 }
