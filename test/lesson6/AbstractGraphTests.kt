@@ -183,6 +183,26 @@ abstract class AbstractGraphTests {
         assertEquals(4, tree3.findBridges().size)
     }
 
+    // minimumSpanningTree test
+
+    fun minimumSpanningTreeMy(minimumSpanningTree: Graph.() -> Graph) {
+        val graph = GraphBuilder().apply {
+            val a = addVertex("A")
+            val b = addVertex("B")
+            val c = addVertex("C")
+            val d = addVertex("D")
+            addConnection(a, b)
+            addConnection(b, c)
+            addConnection(a, c)
+            addConnection(a, d)
+            addConnection(b, d)
+            addConnection(c, d)
+        }.build()
+        val tree = graph.minimumSpanningTree()
+        assertEquals(3, tree.edges.size)
+        assertEquals(3, tree.findBridges().size)
+    }
+
     fun largestIndependentVertexSet(largestIndependentVertexSet: Graph.() -> Set<Graph.Vertex>) {
         val emptyGraph = GraphBuilder().build()
         assertTrue(emptyGraph.largestIndependentVertexSet().isEmpty())
@@ -351,6 +371,21 @@ abstract class AbstractGraphTests {
         }.build()
         val longestPath3 = graph3.longestSimplePath()
         assertEquals(6, longestPath3.length)
+    }
+
+    // longestSimplePath test
+
+    fun longestSimplePathMy(longestSimplePath: Graph.() -> Path) {
+        val noEdgeGraph = GraphBuilder().apply {
+            val a = addVertex("A")
+            val b = addVertex("B")
+            val c = addVertex("C")
+            addConnection(a, b)
+            addConnection(a, c)
+            addConnection(b, c)
+        }.build()
+        val longestNoEdgePath = noEdgeGraph.longestSimplePath()
+        assertEquals(2, longestNoEdgePath.length)
     }
 
     fun baldaSearcher(baldaSearcher: (String, Set<String>) -> Set<String>) {

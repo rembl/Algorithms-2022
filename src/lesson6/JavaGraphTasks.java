@@ -1,7 +1,9 @@
 package lesson6;
 
 import kotlin.NotImplementedError;
+import lesson6.impl.GraphBuilder;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -66,7 +68,24 @@ public class JavaGraphTasks {
      * J ------------ K
      */
     public static Graph minimumSpanningTree(Graph graph) {
-        throw new NotImplementedError();
+
+        //сложность O(N * кол-во его соседей)
+        //память O(N)
+
+        GraphBuilder result = new GraphBuilder();
+        Set<Graph.Vertex> connected = new HashSet<>();
+
+        for (Graph.Vertex givenFVer : graph.getVertices()) {
+            result.addVertex(givenFVer.getName());
+            for (Graph.Vertex givenSVer : graph.getNeighbors(givenFVer)) {
+                if(!connected.contains(givenFVer) || !connected.contains(givenSVer)) {
+                    connected.add(givenFVer);
+                    connected.add(givenSVer);
+                    result.addConnection(givenFVer, givenSVer, 0);
+                }
+            }
+        }
+        return result.build();
     }
 
     /**
@@ -118,7 +137,29 @@ public class JavaGraphTasks {
      * Ответ: A, E, J, K, D, C, H, G, B, F, I
      */
     public static Path longestSimplePath(Graph graph) {
-        throw new NotImplementedError();
+
+        //сложность O(N^2)
+        //память O(N)
+
+        Path result = new Path();
+
+        for (Graph.Vertex vertex : graph.getVertices()) {
+            Path thisPath = new Path(vertex);
+            result = search(result, thisPath, graph, vertex);
+        }
+        return result;
+    }
+
+    private static Path search(Path result, Path oldPath, Graph graph, Graph.Vertex vertex) {
+
+        for (Graph.Vertex next : graph.getNeighbors(vertex)) {
+            if (!oldPath.contains(next)) {
+                Path thisPath = new Path(oldPath, graph, next);
+                if (thisPath.getLength() > result.getLength()) result = thisPath;
+                result = search(result, thisPath, graph, next);
+            }
+        }
+        return result;
     }
 
 

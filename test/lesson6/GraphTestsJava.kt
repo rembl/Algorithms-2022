@@ -14,6 +14,7 @@ class GraphTestsJava : AbstractGraphTests() {
     @Tag("7")
     fun testMinimumSpanningTreeJava() {
         minimumSpanningTree { let { JavaGraphTasks.minimumSpanningTree(it) } }
+        minimumSpanningTreeMy { let { JavaGraphTasks.minimumSpanningTree(it) } }
     }
 
     @Test
@@ -26,6 +27,7 @@ class GraphTestsJava : AbstractGraphTests() {
     @Tag("8")
     fun testLongestSimplePathJava() {
         longestSimplePath { let { JavaGraphTasks.longestSimplePath(it) } }
+        longestSimplePathMy { let { JavaGraphTasks.longestSimplePath(it) } }
     }
 
     @Test
